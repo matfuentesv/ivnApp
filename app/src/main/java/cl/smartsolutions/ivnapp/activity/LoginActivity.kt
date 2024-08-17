@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import cl.smartsolutions.ivnapp.R
+import cl.smartsolutions.ivnapp.repository.UserRepository
 
 class LoginActivity : AppCompatActivity() {
 
@@ -20,16 +20,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnForgotPassword: TextView
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         // Se recupera los valores de la vistas con sus IDs en el archivo XML
         etEmail = findViewById(R.id.emailEditText)
@@ -40,8 +34,18 @@ class LoginActivity : AppCompatActivity() {
 
 
         btnLogin.setOnClickListener {
-            // Lógica de autenticación, redirige a NotesActivity si es exitoso
-            startActivity(Intent(this, NotesActivity::class.java))
+            // Lógica de autenticación
+            val email = etEmail.text.toString()
+            val password = etPassword.text.toString()
+            if (UserRepository.validateUser(email, password)) {
+                val intent = Intent(this, NotesActivity::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show()
+            }
+
+
+
         }
 
         btnRegister.setOnClickListener {
@@ -53,8 +57,6 @@ class LoginActivity : AppCompatActivity() {
             // Redirige a la pantalla de recuperación de contraseña
             startActivity(Intent(this, RecoverPasswordActivity::class.java))
         }
-
-
 
     }
 }
