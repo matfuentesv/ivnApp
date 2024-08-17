@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cl.smartsolutions.ivnapp.R
 import cl.smartsolutions.ivnapp.model.Note
 
-class NotesAdapter(private val notes: List<Note>) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
+class NotesAdapter(private val notes: List<Note>, private val onNoteClicked: (Note) -> Unit) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -19,11 +19,12 @@ class NotesAdapter(private val notes: List<Note>) : RecyclerView.Adapter<NotesAd
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val note = notes[position]
         holder.bind(note)
+        holder.itemView.setOnClickListener {
+            onNoteClicked(note)
+        }
     }
 
-    override fun getItemCount(): Int {
-        return notes.size
-    }
+    override fun getItemCount(): Int = notes.size
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val noteTitle: TextView = itemView.findViewById(R.id.textViewNoteTitle)
