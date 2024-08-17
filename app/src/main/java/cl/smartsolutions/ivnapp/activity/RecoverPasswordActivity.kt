@@ -1,6 +1,10 @@
 package cl.smartsolutions.ivnapp.activity
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -38,13 +42,24 @@ class RecoverPasswordActivity : AppCompatActivity() {
             if(user!=null){
                 Toast.makeText(this, "Contraseña enviada a: " + user?.getEmail(), Toast.LENGTH_SHORT).show()
             }else {
-                Toast.makeText(this, "No se pudo encontrar el email", Toast.LENGTH_SHORT).show()
+                showLoginErrorFeedback("No se pudo encontrar el email")
             }
-
         }
 
         backButton.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun showLoginErrorFeedback(message: String) {
+        // Vibración para notificar el error
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(500)
+        }
+
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
