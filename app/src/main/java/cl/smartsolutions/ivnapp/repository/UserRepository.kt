@@ -16,6 +16,10 @@ object UserRepository {
     fun validateUser(email: String, password: String): Boolean {
         return users.any { it.getEmail() == email && it.getPassword() == password }
     }
+
+    fun validateUserByEmail(email: String): User? {
+        return users.find { it.getEmail() == email }
+    }
     fun createUser(user: User){
         users.add(user)
     }
