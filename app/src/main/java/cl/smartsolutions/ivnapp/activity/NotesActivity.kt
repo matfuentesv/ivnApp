@@ -64,7 +64,12 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            // Configura el idioma español
+            textToSpeech.language = Locale("es", "ES")
+
+            // Ajustes para hacer que la voz suene más natural
+            textToSpeech.setPitch(0.9f)  // Disminuir el tono ligeramente
+            textToSpeech.setSpeechRate(0.9f)  // Disminuir la velocidad de habla
+
             val result = textToSpeech.setLanguage(Locale("es", "ES"))
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Toast.makeText(this, "El idioma no es soportado", Toast.LENGTH_SHORT).show()
@@ -73,6 +78,7 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             Toast.makeText(this, "Error al inicializar Text to Speech", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     private fun loadNotes() {
