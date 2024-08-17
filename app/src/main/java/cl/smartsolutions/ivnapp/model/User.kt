@@ -1,6 +1,6 @@
 package cl.smartsolutions.ivnapp.model
 
-class User(
+data class User(
     private var firstName: String,
     private var lastName: String,
     private var email: String,

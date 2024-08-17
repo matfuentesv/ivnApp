@@ -13,6 +13,9 @@
         android:theme="@style/Theme.IvnApp"
         tools:targetApi="31">
         <activity
+            android:name=".activity.AddNoteActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.RecoverPasswordActivity"
             android:exported="false" />
         <activity
