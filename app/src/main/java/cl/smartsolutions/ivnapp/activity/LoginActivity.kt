@@ -56,6 +56,7 @@ class LoginActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             if (UserRepository.validateUser(email, password)) {
                 val intent = Intent(this, NotesActivity::class.java)
                 startActivity(intent)
+                showLoginErrorFeedback("Usuario valido correctamente,bienvenido")
             } else {
                 // Retroalimentación de error
                 showLoginErrorFeedback("Usuario y/o contraseña incorrecta")
