@@ -31,26 +31,22 @@ class LoginActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Inicializar TextToSpeech y Vibrator
+
         textToSpeech = TextToSpeech(this, this)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-        // Inicializar vistas
+
         etEmail = findViewById(R.id.emailEditText)
         etPassword = findViewById(R.id.passwordEditText)
         btnLogin = findViewById(R.id.loginButton)
         btnRegister = findViewById(R.id.registerButton)
         btnForgotPassword = findViewById(R.id.forgotPassword)
-
-        // Desactivar botón de login inicialmente
         btnLogin.isEnabled = false
-
-        // Activar el botón de login solo cuando ambos campos estén llenos
         etEmail.addTextChangedListener { validateInputs() }
         etPassword.addTextChangedListener { validateInputs() }
 
         btnLogin.setOnClickListener {
-            // Lógica de autenticación
+
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             if (UserRepository.validateUser(email, password)) {
@@ -58,18 +54,18 @@ class LoginActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 startActivity(intent)
                 showLoginErrorFeedback("Usuario validado correctamente,bienvenido")
             } else {
-                // Retroalimentación de error
+
                 showLoginErrorFeedback("Usuario y/o contraseña incorrecta")
             }
         }
 
         btnRegister.setOnClickListener {
-            // Redirigir a la pantalla de registro
+
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
         btnForgotPassword.setOnClickListener {
-            // Redirigir a la pantalla de recuperación de contraseña
+
             startActivity(Intent(this, RecoverPasswordActivity::class.java))
         }
     }
@@ -94,25 +90,21 @@ class LoginActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun showLoginErrorFeedback(message: String) {
-        // Vibración para notificar el error
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
             vibrator.vibrate(500)
         }
 
-        // Reproducir mensaje de error
         textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null, null)
 
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
-        // Libera recursos de TextToSpeech
-        if (textToSpeech != null) {
-            textToSpeech.stop()
-            textToSpeech.shutdown()
-        }
+        textToSpeech.stop()
+        textToSpeech.shutdown()
         super.onDestroy()
     }
 }

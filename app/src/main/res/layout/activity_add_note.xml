@@ -5,7 +5,7 @@
     android:padding="16dp"
     android:background="@color/white">
 
-    <!-- Título de la nota -->
+
     <EditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:gravity="start|center_vertical"
         android:inputType="text" />
 
-    <!-- Contenido de la nota -->
+
     <EditText
         android:id="@+id/editTextContent"
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
         android:minLines="10"
         android:scrollbars="vertical" />
 
-    <!-- Botón para guardar la nota -->
+
     <Button
         android:id="@+id/buttonSaveNote"
         android:layout_width="match_parent"

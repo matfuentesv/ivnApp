@@ -31,24 +31,23 @@ class RecoverPasswordActivity : AppCompatActivity(), TextToSpeech.OnInitListener
         enableEdgeToEdge()
         setContentView(R.layout.activity_recover_password)
 
-        // Inicializar TextToSpeech y Vibrator
+
         textToSpeech = TextToSpeech(this, this)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-        // Vincular las vistas con sus IDs
+
         etEmail = findViewById(R.id.emailEditText)
         btnRecoverPassword = findViewById(R.id.recoverPasswordButton)
         backButton = findViewById(R.id.backButton)
 
-        // Desactivar el botón inicialmente
+
         btnRecoverPassword.isEnabled = false
 
-        // Agregar un TextWatcher para habilitar/deshabilitar el botón según el input
         etEmail.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Habilitar el botón solo si hay texto ingresado
+
                 btnRecoverPassword.isEnabled = !s.isNullOrEmpty()
             }
 
@@ -87,21 +86,19 @@ class RecoverPasswordActivity : AppCompatActivity(), TextToSpeech.OnInitListener
     }
 
     private fun showLoginErrorFeedback(message: String) {
-        // Vibración para notificar el error
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
             vibrator.vibrate(500)
         }
 
-        // Reproducir mensaje de error
         textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null, null)
 
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
-        // Libera recursos de TextToSpeech
         if (textToSpeech != null) {
             textToSpeech.stop()
             textToSpeech.shutdown()

@@ -19,7 +19,7 @@ class AddNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
 
-        // Vincular las vistas con sus IDs
+
         etNoteTitle = findViewById(R.id.editTextTitle)
         etNoteContent = findViewById(R.id.editTextContent)
         btnSaveNote = findViewById(R.id.buttonSaveNote)

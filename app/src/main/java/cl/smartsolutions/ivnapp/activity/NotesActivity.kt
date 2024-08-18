@@ -38,11 +38,11 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
 
-        // Configurar el Toolbar
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Configurar el DrawerLayout y NavigationView
+
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
 
@@ -53,7 +53,7 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // Configurar el listener para el NavigationView
+
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
@@ -64,26 +64,25 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         }
 
-        // Configurar el Text-to-Speech y Vibrator
+
         textToSpeech = TextToSpeech(this, this)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-        // Configurar el RecyclerView
+
         recyclerViewNotes = findViewById(R.id.recyclerViewNotes)
         recyclerViewNotes.layoutManager = LinearLayoutManager(this)
         recyclerViewNotes.adapter = NotesAdapter(notesList) { note ->
             readNoteContent(note)
         }
 
-        // Configurar el FloatingActionButton
+
         fabAddNote = findViewById(R.id.fabAddNote)
         fabAddNote.setOnClickListener {
-            // Acción al hacer clic en el botón para agregar una nueva nota
+
             val intent = Intent(this, AddNoteActivity::class.java)
             startActivityForResult(intent, 1)
         }
 
-        // Cargar notas de ejemplo
         loadNotes()
     }
 
@@ -94,7 +93,7 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 val note = it.getSerializableExtra("note") as Note
                 notesList.add(note)
                 recyclerViewNotes.adapter?.notifyDataSetChanged()
-                provideFeedback() // Proporcionar retroalimentación cuando se agrega una nueva nota
+                provideFeedback()
             }
         }
     }
@@ -139,14 +138,13 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun provideFeedback() {
-        // Vibración para notificar al usuario
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
             vibrator.vibrate(500)
         }
 
-        // Mensaje opcional
         Toast.makeText(this, "Nueva nota agregada", Toast.LENGTH_SHORT).show()
     }
 

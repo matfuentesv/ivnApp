@@ -32,10 +32,8 @@ class RegisterActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
 
-        // Inicializar TextToSpeech
         textToSpeech = TextToSpeech(this, this)
 
-        // Vincular las vistas con sus IDs
         etName = findViewById(R.id.nameEditText)
         etLastName = findViewById(R.id.lastNameEditText)
         etEmail = findViewById(R.id.emailEditText)
@@ -44,10 +42,8 @@ class RegisterActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         btnRegister = findViewById(R.id.registerButton)
         backButton = findViewById(R.id.backButton)
 
-        // Desactivar el botón de registro inicialmente
         btnRegister.isEnabled = false
 
-        // Agregar un TextWatcher para verificar si todos los campos están llenos
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -76,7 +72,6 @@ class RegisterActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
                 UserRepository.createUser(user)
 
-                // Mensaje de voz al registrarse
                 val message = "Usuario registrado exitosamente"
                 textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null, null)
 
@@ -107,7 +102,6 @@ class RegisterActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     override fun onDestroy() {
-        // Liberar recursos de TextToSpeech
         if (textToSpeech != null) {
             textToSpeech.stop()
             textToSpeech.shutdown()
