@@ -53,6 +53,17 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+        // Configurar el listener para el NavigationView
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_logout -> {
+                    logoutUser()
+                    true
+                }
+                else -> false
+            }
+        }
+
         // Configurar el Text-to-Speech y Vibrator
         textToSpeech = TextToSpeech(this, this)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -137,6 +148,16 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         // Mensaje opcional
         Toast.makeText(this, "Nueva nota agregada", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun logoutUser() {
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     override fun onBackPressed() {
