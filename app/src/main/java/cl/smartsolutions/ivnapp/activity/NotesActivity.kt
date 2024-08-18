@@ -7,68 +7,80 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.speech.tts.TextToSpeech
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cl.smartsolutions.ivnapp.R
 import cl.smartsolutions.ivnapp.adapter.NotesAdapter
 import cl.smartsolutions.ivnapp.model.Note
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import java.util.*
 
 class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var recyclerViewNotes: RecyclerView
     private lateinit var fabAddNote: FloatingActionButton
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navigationView: NavigationView
+    private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var vibrator: Vibrator
-    private lateinit var backButton: ImageView
-
     private val notesList = mutableListOf<Note>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_notes)
 
-        backButton = findViewById(R.id.backButton)
-        // Inicialización de TextToSpeech y Vibrator
+        // Configurar el Toolbar
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Configurar el DrawerLayout y NavigationView
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navigationView = findViewById(R.id.nav_view)
+
+        toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        // Configurar el Text-to-Speech y Vibrator
         textToSpeech = TextToSpeech(this, this)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
+        // Configurar el RecyclerView
         recyclerViewNotes = findViewById(R.id.recyclerViewNotes)
-        fabAddNote = findViewById(R.id.fabAddNote)
-
         recyclerViewNotes.layoutManager = LinearLayoutManager(this)
         recyclerViewNotes.adapter = NotesAdapter(notesList) { note ->
             readNoteContent(note)
         }
 
+        // Configurar el FloatingActionButton
+        fabAddNote = findViewById(R.id.fabAddNote)
         fabAddNote.setOnClickListener {
+            // Acción al hacer clic en el botón para agregar una nueva nota
             val intent = Intent(this, AddNoteActivity::class.java)
             startActivity(intent)
             provideFeedback()
         }
 
-        // Carga de notas (en un proyecto real, estas podrían cargarse desde una base de datos o API)
+        // Cargar notas de ejemplo
         loadNotes()
-
-
-        backButton.setOnClickListener {
-            onBackPressed()
-        }
     }
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             textToSpeech.language = Locale("es", "ES")
-
-            // Ajustes para hacer que la voz suene más natural
-            textToSpeech.setPitch(0.9f)  // Disminuir el tono ligeramente
-            textToSpeech.setSpeechRate(0.9f)  // Disminuir la velocidad de habla
+            textToSpeech.setPitch(0.9f)
+            textToSpeech.setSpeechRate(0.9f)
 
             val result = textToSpeech.setLanguage(Locale("es", "ES"))
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -79,10 +91,7 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
-
-
     private fun loadNotes() {
-
         notesList.add(Note("Saludo", "Hola, ¿cómo estás?"))
         notesList.add(Note("Pedido de ayuda", "¿Podrías ayudarme, por favor?"))
         notesList.add(Note("Pregunta por dirección", "¿Dónde está el baño?"))
@@ -95,13 +104,12 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         notesList.add(Note("Pedido de comida", "Quisiera pedir una hamburguesa sin queso, por favor."))
         notesList.add(Note("Confirmación", "Sí, entiendo."))
         notesList.add(Note("Negación", "No, no necesito ayuda, gracias."))
-        notesList.add(Note("Llamada de emergencia", "Por favor, llama al 911, hay una emergencia."))
+        notesList.add(Note("Llamada de emergencia", "Por favor, llama al 133, hay una emergencia."))
         notesList.add(Note("Despedida", "Adiós, que tengas un buen día."))
         notesList.add(Note("Pregunta por tiempo", "¿Qué hora es?"))
 
         recyclerViewNotes.adapter?.notifyDataSetChanged()
     }
-
 
     private fun readNoteContent(note: Note) {
         textToSpeech.speak(note.content, TextToSpeech.QUEUE_FLUSH, null, null)
@@ -119,6 +127,14 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         Toast.makeText(this, "Nueva nota agregada", Toast.LENGTH_SHORT).show()
     }
 
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onDestroy() {
         // Libera recursos de TextToSpeech
         if (textToSpeech != null) {
@@ -127,6 +143,4 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
         super.onDestroy()
     }
-
-
 }
