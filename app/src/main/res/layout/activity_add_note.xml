@@ -1,35 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/white">
 
+    <!-- Título de la nota -->
     <EditText
-        android:id="@+id/etNoteTitle"
+        android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Título de la nota"
-        android:textSize="18sp"
-        android:padding="12dp" />
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:background="@android:color/transparent"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="start|center_vertical"
+        android:inputType="text" />
 
+    <!-- Contenido de la nota -->
     <EditText
-        android:id="@+id/etNoteContent"
+        android:id="@+id/editTextContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:hint="Contenido de la nota"
-        android:textSize="16sp"
-        android:padding="12dp" />
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:background="@android:color/transparent"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:padding="12dp"
+        android:minLines="10"
+        android:scrollbars="vertical" />
 
+    <!-- Botón para guardar la nota -->
     <Button
-        android:id="@+id/btnSaveNote"
+        android:id="@+id/buttonSaveNote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Guardar Nota"
+        android:textStyle="bold"
+        android:padding="16dp"
         android:layout_marginTop="16dp"
-        android:background="@color/teal_700"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/teal_700"
         android:textColor="@android:color/white"
-        android:padding="12dp" />
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

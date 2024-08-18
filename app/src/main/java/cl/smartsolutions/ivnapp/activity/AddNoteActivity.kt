@@ -19,9 +19,10 @@ class AddNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
 
-        etNoteTitle = findViewById(R.id.etNoteTitle)
-        etNoteContent = findViewById(R.id.etNoteContent)
-        btnSaveNote = findViewById(R.id.btnSaveNote)
+        // Vincular las vistas con sus IDs
+        etNoteTitle = findViewById(R.id.editTextTitle)
+        etNoteContent = findViewById(R.id.editTextContent)
+        btnSaveNote = findViewById(R.id.buttonSaveNote)
 
         btnSaveNote.setOnClickListener {
             val title = etNoteTitle.text.toString()
