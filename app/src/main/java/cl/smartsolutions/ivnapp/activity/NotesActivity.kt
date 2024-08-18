@@ -1,5 +1,6 @@
 package cl.smartsolutions.ivnapp.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -68,12 +69,23 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         fabAddNote.setOnClickListener {
             // Acción al hacer clic en el botón para agregar una nueva nota
             val intent = Intent(this, AddNoteActivity::class.java)
-            startActivity(intent)
-            provideFeedback()
+            startActivityForResult(intent, 1)
         }
 
         // Cargar notas de ejemplo
         loadNotes()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            data?.let {
+                val note = it.getSerializableExtra("note") as Note
+                notesList.add(note)
+                recyclerViewNotes.adapter?.notifyDataSetChanged()
+                provideFeedback() // Proporcionar retroalimentación cuando se agrega una nueva nota
+            }
+        }
     }
 
     override fun onInit(status: Int) {
@@ -136,7 +148,6 @@ class NotesActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     override fun onDestroy() {
-        // Libera recursos de TextToSpeech
         if (textToSpeech != null) {
             textToSpeech.stop()
             textToSpeech.shutdown()
